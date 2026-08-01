@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.1](https://github.com/m0nds/medicore-frontend/compare/v0.1.0...v0.1.1) (2026-08-01)
+
+### 🐛 Bug Fixes
+
+* sign in issue and routing to the respective role-gated dahsboard ([bd0cd5c](https://github.com/m0nds/medicore-frontend/commit/bd0cd5c15e6744ca0dae4cf3e1d1f2bceb428769))
+
 ## 0.1.0 (2026-08-01)
 
 ### ✨ Features
