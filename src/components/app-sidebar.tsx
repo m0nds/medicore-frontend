@@ -1,4 +1,4 @@
-import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router'
+import { Link, useMatchRoute, useNavigate, type LinkProps } from '@tanstack/react-router'
 import {
   Building2,
   Calendar,
@@ -11,7 +11,6 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { Role } from '@/types'
-import type { RoleHomePath } from '@/lib/portal'
 import { useAuthStore } from '@/stores/auth.store'
 import {
   Sidebar,
@@ -26,15 +25,16 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { useLogout } from '@/hooks/useAuth'
 
-// Only Dashboard is wired to a real route today; the rest render as disabled
-// placeholders (keeps everything type-safe — `to` only accepts real routes).
-type NavItem = { title: string; icon: LucideIcon; to?: RoleHomePath }
+// `to` accepts any registered route (type-safe); items without a `to` render as
+// disabled placeholders.
+type NavItem = { title: string; icon: LucideIcon; to?: LinkProps['to'] }
 
 const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   PATIENT: [
     { title: 'Dashboard', icon: LayoutDashboard, to: '/patient/dashboard' },
-    { title: 'Appointments', icon: Calendar },
+    { title: 'Appointments', icon: Calendar, to: '/patient/appointments' },
     { title: 'Medical records', icon: FileText },
     { title: 'Prescriptions', icon: Pill },
   ],
@@ -75,10 +75,14 @@ export function AppSidebar({ role }: { role: Role }) {
   const user = useAuthStore((s) => s.user)
   const navigate = useNavigate()
   const matchRoute = useMatchRoute()
+  const logout = useLogout()
 
   const handleLogout = () => {
-    useAuthStore.getState().resetState()
-    navigate({ to: '/login' })
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        navigate({ to: '/login' })
+      }
+    })
   }
 
   return (

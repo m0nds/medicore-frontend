@@ -18,8 +18,10 @@ export interface LoginPayload {
 
 
 export interface LoginResponse {
-  accessToken: string;
-  user: UserResponse;
+  data: {
+    accessToken: string;
+    user: UserResponse;
+  }
 }
 
 export interface ForgotPasswordPayload {

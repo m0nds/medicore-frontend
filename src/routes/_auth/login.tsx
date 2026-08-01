@@ -1,4 +1,4 @@
-import { LoginPage } from '@/pages/auth/login-page'
+import { Login } from '@/pages/auth/login'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/login')({
@@ -7,5 +7,5 @@ export const Route = createFileRoute('/_auth/login')({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } => ({
     redirect: typeof search.redirect === 'string' ? search.redirect : undefined,
   }),
-  component: LoginPage,
+  component: Login,
 })

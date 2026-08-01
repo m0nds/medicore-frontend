@@ -3,7 +3,7 @@ import service from "./service";
 
 export const authService = {
   login: async (data: LoginPayload): Promise<LoginResponse> => {
-    const response = await service.post(`/auth/login`, data);
+    const response = await service.post<LoginResponse>(`/auth/login`, data);
     return response.data
   },
   register: async (data: RegisterPayload) => {
@@ -29,4 +29,8 @@ export const authService = {
     const response = await service.post(`/auth/refresh-token`);
     return response.data;
   },
+  logout: async () => {
+    const response = await service.post(`/auth/logout`);
+    return response.data;
+  }
 }

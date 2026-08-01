@@ -4,6 +4,8 @@ import { getRouteApi } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { loginSchema, type LoginBody } from '@/schemas/auth.schema'
 import { useLogin } from '@/hooks/useAuth'
+import { userService } from '@/services/user.service'
+import { useAuthStore } from '@/stores/auth.store'
 import { roleHomePath, type RoleHomePath } from '@/lib/portal'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,7 +21,7 @@ import {
 
 const route = getRouteApi('/_auth/login')
 
-export const LoginPage = () => {
+export const Login = () => {
   const navigate = route.useNavigate()
   const { redirect } = route.useSearch()
   const login = useLogin()
@@ -33,11 +35,14 @@ export const LoginPage = () => {
 
   const onSubmit = (values: LoginBody) => {
     login.mutate(values, {
-      onSuccess: (res) => {
-        // `redirect` is a pre-login internal path captured by the auth guard.
-        navigate({ to: (redirect ?? roleHomePath(res.user.role)) as RoleHomePath })
+      onSuccess: async () => {
+        const me = await userService.getUser()
+        if (me?.data) {
+          useAuthStore.getState().setUser(me.data)
+          toast.success(`You're logged in successfully as a ${me.data.role.toLowerCase()}`)
+          navigate({ to: (redirect || roleHomePath(me.data.role)) as RoleHomePath })
+        }
       },
-      onError: () => toast.error('Invalid email or password'),
     })
   }
 
