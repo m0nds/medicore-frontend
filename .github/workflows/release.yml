@@ -12,10 +12,9 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    # Skip the "chore: release vX" commit release-it pushes back to main, so the
-    # workflow never re-triggers itself. (Pushes made with the default
-    # GITHUB_TOKEN don't trigger workflows either, so this is belt-and-suspenders.)
-    if: ${{ !startsWith(github.event.head_commit.message, 'chore: release') }}
+    # No self-trigger guard needed: the release commit/tag is pushed with the
+    # default GITHUB_TOKEN, and pushes made with that token don't start new
+    # workflow runs. (Even if one did, release-it finds no new commits and exits.)
     env:
       HUSKY: '0' # don't install git hooks in CI
     steps:
