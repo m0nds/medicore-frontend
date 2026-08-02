@@ -1,5 +1,11 @@
 # Changelog
 
+## [null](https://github.com/m0nds/medicore-frontend/compare/v0.1.1...vnull) (2026-08-02)
+
+### 🤖 CI
+
+* simplify release workflow trigger ([7a70b85](https://github.com/m0nds/medicore-frontend/commit/7a70b85ece7d3b7a9d7f0e9eace26baea34e7d38))
+
 ## [0.1.1](https://github.com/m0nds/medicore-frontend/compare/v0.1.0...v0.1.1) (2026-08-01)
 
 ### 🐛 Bug Fixes
