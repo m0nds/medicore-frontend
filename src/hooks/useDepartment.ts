@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { FetchParams } from '@/types'
+import type { ErrorResponse, FetchParams } from '@/types'
 import type { DepartmentPayload } from '@/types/department.type'
 import { departmentService } from '@/services/department.service'
 import { departmentKeys } from '@/lib/queryKeys'
+import type { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 export function useDepartments(params: FetchParams) {
   return useQuery({
@@ -26,6 +28,9 @@ export function useCreateDepartment() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: departmentKeys.lists })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not create the department. Please try again.')
+    }
   })
 }
 
@@ -39,6 +44,9 @@ export function useUpdateDepartment() {
       queryClient.invalidateQueries({ queryKey: departmentKeys.lists })
       queryClient.invalidateQueries({ queryKey: departmentKeys.detail(id) })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update the department. Please try again.')
+    }
   })
 }
 
@@ -50,5 +58,8 @@ export function useDeleteDepartment() {
       queryClient.invalidateQueries({ queryKey: departmentKeys.lists })
       queryClient.invalidateQueries({ queryKey: departmentKeys.detail(id) })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not delete the department. Please try again.')
+    }
   })
 }

@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { FetchParams } from '@/types'
+import type { ErrorResponse, FetchParams } from '@/types'
 import { patientService } from '@/services/patient.service'
 import { patientKeys } from '@/lib/queryKeys'
+import type { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 export function usePatients(params: FetchParams) {
   return useQuery({
@@ -33,5 +35,8 @@ export function useUpdatePatientProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: patientKeys.me() })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update the patient. Please try again.')
+    }
   })
 }

@@ -18,7 +18,7 @@ export function PortalShell({ role, children }: { role: Role; children: ReactNod
           <Separator orientation="vertical" className="mr-2 h-4" />
           {/* breadcrumb slot */}
         </header>
-        <div className="flex-1 overflow-auto">{children}</div>
+        <div className="flex-1 overflow-auto p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   )

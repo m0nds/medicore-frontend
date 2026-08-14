@@ -1,4 +1,5 @@
 import type { ForgotPasswordPayload, LoginPayload, LoginResponse, RegisterPayload, ResetPasswordPayload } from "@/types/auth.type";
+import type { ApiResponse } from "@/types";
 import service from "./service";
 
 export const authService = {
@@ -23,11 +24,13 @@ export const authService = {
     return response.data;
   },
   // No body needed — the refreshToken rides along in the httpOnly cookie.
-  // Returns only a fresh accessToken; /auth/refresh-token is excluded from the
+  // Returns only a fresh accessToken; /auth/refresh is excluded from the
   // response interceptor's refresh retry, so routing it through `service` is safe.
   refreshToken: async (): Promise<{ accessToken: string }> => {
-    const response = await service.post(`/auth/refresh-token`);
-    return response.data;
+    // Unwrap the ApiResponse envelope — the token is at response.data.data,
+    // not response.data (which is { success, message, data }).
+    const response = await service.post<ApiResponse<{ accessToken: string }>>(`/auth/refresh`);
+    return response.data.data;
   },
   logout: async () => {
     const response = await service.post(`/auth/logout`);

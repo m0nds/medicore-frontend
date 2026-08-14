@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { FetchParams } from '@/types'
+import type { ErrorResponse, FetchParams } from '@/types'
 import { medicalRecordService } from '@/services/medicalRecord.service'
 import { medicalRecordKeys } from '@/lib/queryKeys'
+import type { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 export function useMedicalRecords(params: FetchParams) {
   return useQuery({
@@ -25,6 +27,9 @@ export function useCreateMedicalRecord() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: medicalRecordKeys.lists })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not create the medical record. Please try again.')
+    }
   })
 }
 
@@ -36,5 +41,8 @@ export function useUpdateMedicalRecord() {
       queryClient.invalidateQueries({ queryKey: medicalRecordKeys.lists })
       queryClient.invalidateQueries({ queryKey: medicalRecordKeys.detail(id) })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update the medical record. Please try again.')
+    }
   })
 }

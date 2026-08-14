@@ -2,6 +2,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { FetchDoctorParams } from '@/types/doctor.type'
 import { doctorService } from '@/services/doctor.service'
 import { doctorKeys } from '@/lib/queryKeys'
+import type { AxiosError } from 'axios'
+import type { ErrorResponse } from '@/types'
+import { toast } from 'sonner'
 
 export function useDoctors(params: FetchDoctorParams) {
   return useQuery({
@@ -33,6 +36,9 @@ export function useUpdateDoctorProfile() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: doctorKeys.me() })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update the doctor profile. Please try again.')
+    }
   })
 }
 
@@ -44,5 +50,8 @@ export function useToggleDoctorAvailability() {
       queryClient.invalidateQueries({ queryKey: doctorKeys.me() })
       queryClient.invalidateQueries({ queryKey: doctorKeys.lists })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update availability. Please try again.')
+    }
   })
 }

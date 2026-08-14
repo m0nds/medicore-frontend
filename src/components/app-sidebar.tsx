@@ -40,9 +40,9 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
   PATIENT: [
     { title: 'Dashboard', icon: LayoutDashboard, to: '/patient/dashboard' },
     { title: 'Appointments', icon: Calendar, to: '/patient/appointments' },
-    { title: 'Medical Records', icon: FileText },
-    { title: 'Prescriptions', icon: Pill },
-    { title: 'Lab', icon: TestTubeDiagonal },
+    { title: 'Medical Records', icon: FileText, to: '/patient/medical-records' },
+    { title: 'Prescriptions', icon: Pill, to: '/patient/prescriptions' },
+    { title: 'Lab', icon: TestTubeDiagonal, to:'/patient/lab' },
     { title: 'Notifications', icon: Bell },
   ],
   DOCTOR: [
@@ -158,7 +158,7 @@ export function AppSidebar({ role }: { role: Role }) {
             <Activity className="size-[22px] text-[#6CC7C3]" strokeWidth={2.8} />
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="text-sm font-bold tracking-tight text-sidebar-foreground">MediCore</span>
+            <span className="text-label font-bold text-sidebar-foreground">MediCore</span>
             <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-sidebar-foreground/70">
               {ROLE_LABEL[role]}
             </span>
@@ -186,14 +186,14 @@ export function AppSidebar({ role }: { role: Role }) {
         <SidebarMenu>
           <SidebarMenuItem className='flex'>
             <SidebarMenuButton className="pointer-events-none flex-1" size="lg">
-              <Avatar className="size-8 rounded-md">
-                <AvatarFallback className="rounded-md text-xs">
+              <Avatar className="size-8 rounded-full">
+                <AvatarFallback className="rounded-full text-label text-primary">
                   {initialsOf(user?.name)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col overflow-hidden text-left group-data-[collapsible=icon]:hidden">
-                <span className="truncate text-sm font-medium">{user?.name ?? 'Signed in'}</span>
-                <span className="truncate text-xs text-sidebar-foreground/70">{user?.email}</span>
+                <span className="truncate text-label font-medium">{user?.name ?? 'Signed in'}</span>
+                <span className="truncate text-code-sm text-sidebar-foreground/70">{user?.email}</span>
               </div>
             </SidebarMenuButton>
             <SidebarMenuButton className='w-10 h-full flex items-center justify-center hover:bg-transparent' tooltip="Log out" onClick={handleLogout}>

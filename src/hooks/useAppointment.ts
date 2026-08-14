@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { FetchParams } from '@/types'
+import type { ErrorResponse, FetchParams } from '@/types'
 import { appointmentService } from '@/services/appointment.service'
 import { appointmentKeys } from '@/lib/queryKeys'
+import { toast } from 'sonner'
+import type { AxiosError } from 'axios'
 
 export function useAppointments(params: FetchParams) {
   return useQuery({
@@ -25,6 +27,9 @@ export function useBookAppointment() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: appointmentKeys.lists })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not book the appointment. Please try again.')
+    }
   })
 }
 
@@ -36,6 +41,9 @@ export function useUpdateAppointmentStatus() {
       queryClient.invalidateQueries({ queryKey: appointmentKeys.lists })
       queryClient.invalidateQueries({ queryKey: appointmentKeys.detail(id) })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update appointment status. Please try again.')
+    }
   })
 }
 
@@ -47,5 +55,8 @@ export function useCancelAppointment() {
       queryClient.invalidateQueries({ queryKey: appointmentKeys.lists })
       queryClient.invalidateQueries({ queryKey: appointmentKeys.detail(id) })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not cancel the appointment. Please try again.')
+    }
   })
 }

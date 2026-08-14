@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { FetchParams } from '@/types'
+import type { ErrorResponse, FetchParams } from '@/types'
 import type { LabResultPayload } from '@/types/lab.type'
 import { labService } from '@/services/lab.service'
 import { labKeys } from '@/lib/queryKeys'
+import type { AxiosError } from 'axios'
+import { toast } from 'sonner'
 
 export function useLabOrders(params: FetchParams) {
   return useQuery({
@@ -34,6 +36,9 @@ export function useCreateLabOrder() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: labKeys.orders })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not crete the lab order. Please try again.')
+    }
   })
 }
 
@@ -47,5 +52,8 @@ export function useUpdateLabResult() {
       queryClient.invalidateQueries({ queryKey: labKeys.order(id) })
       queryClient.invalidateQueries({ queryKey: labKeys.result(id) })
     },
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not update the lab result. Please try again.')
+    }
   })
 }

@@ -29,19 +29,39 @@ export function useLogin() {
 }
 
 export function useRegister() {
-  return useMutation({ mutationFn: authService.register })
+  return useMutation({ 
+    mutationFn: authService.register,
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not register. Please try again.')
+    }
+  })
 }
 
 export function useVerifyEmail() {
-  return useMutation({ mutationFn: authService.verifyEmail })
+  return useMutation({ 
+    mutationFn: authService.verifyEmail,
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not verify email. Please try again.')
+    }
+  })
 }
 
 export function useForgotPassword() {
-  return useMutation({ mutationFn: authService.forgotPassword })
+  return useMutation({ 
+    mutationFn: authService.forgotPassword,
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not find email. Please try again.')
+    }
+  })
 }
 
 export function useResetPassword() {
-  return useMutation({ mutationFn: authService.resetPassword })
+  return useMutation({ 
+    mutationFn: authService.resetPassword,
+    onError: (error: AxiosError<ErrorResponse>) => {
+      toast.error(error?.response?.data?.error ?? 'Could not find email. Please try again.')
+    }
+  })
 }
 
 export function useLogout() {

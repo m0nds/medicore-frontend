@@ -78,7 +78,7 @@ service.interceptors.response.use(
     // should surface directly rather than loop).
     const isAuthRequest =
       originalRequest.url?.includes('/auth/login') ||
-      originalRequest.url?.includes('/auth/refresh-token');
+      originalRequest.url?.includes('/auth/refresh');
 
     // If 401 (Unauthorized), not already retried, and NOT an auth request,
     // attempt a token refresh using the httpOnly cookie.
